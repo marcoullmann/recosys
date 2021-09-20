@@ -29,8 +29,8 @@ hated = []
 for ratings in userRatings:
     if (float(ratings[1]) > 4.0):
         loved.append(ratings)
-    if (float(ratings[1]) < 3.0):
-        hated.append(ratings)
+    #if (float(ratings[1]) < 3.0):
+    #    hated.append(ratings)
 
 print("\nUser ", testSubject, " loved these movies:")
 for ratings in loved:
