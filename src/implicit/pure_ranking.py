@@ -102,10 +102,28 @@ if __name__ == "__main__":
     start_time = time.perf_counter()
     fig, ax = plt.subplots()
     dtypes = {'user': 'string', 'item': 'string', 'time': 'int64'}
-    dataset = "yoochoose_dense"
-    data = pd.read_csv("D:/dev/marco/masterthesis/recosys/data/curated/yoochoose_dense.csv",
-                       header=None, names=["user", "item", "time"],
-                       dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "yoochoose_dense"
+    #data = pd.read_csv("./data/curated/yoochoose_dense.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "yoochoose"
+    #data = pd.read_csv("./data/curated/yoochoose.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "ratailrocket_dense"
+    #data = pd.read_csv("./data/curated/ratailrocket_dense.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "b2b_dense"
+    #data = pd.read_csv("./data/curated/b2b_dense.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "b2b"
+    #data = pd.read_csv("./data/curated/b2b.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    #dataset = "b2c_dense"
+    #data = pd.read_csv("./data/curated/b2c_dense.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
+    dataset = "b2c"
+    data = pd.read_csv("./data/curated/b2c.csv", header=None, names=["user", "item", "time"], dtype=dtypes, parse_dates=["time"]) #columns: user, item, time, label
+
     data['label'] = 2
     metrics = ["loss", "balanced_accuracy", "roc_auc", "pr_auc",
                "precision", "recall", "map", "ndcg"]
@@ -126,12 +144,7 @@ if __name__ == "__main__":
     svd = SVD("ranking", data_info, embed_size=16, n_epochs=15, lr=0.001, reg=None, batch_size=256, batch_sampling=False, num_neg=1)
     svd.fit(train_data, eval_data=eval_data,  metrics=metrics, shuffle=True, dataset_name=dataset, verbose=2)
     evals = evals + svd.evals
-    # svd.fit(eval_data=eval_data, metrics=metrics)
-    #evals.append(evaluate("SVD", dataset, svd, eval_data, metrics))
-    #svd.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=3)
-    #svd.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=5)
-    #svd.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=10)
-    #e = my_evaluate(svd, eval_data, metrics=metrics, ax=ax)
+
     print("prediction: ", svd.predict(user=1, item=2333))
     print("recommendation: ", svd.recommend_user(user=1, n_rec=7))
 
@@ -140,11 +153,6 @@ if __name__ == "__main__":
     svdpp.fit(train_data, eval_data=eval_data,  metrics=metrics, dataset_name=dataset, verbose=2)
     evals = evals + svdpp.evals
 
-    #evals.append(evaluate("SVD++", dataset, svdpp, eval_data, metrics))
-    #svdpp.fit(train_data, verbose=2, eval_data=eval_data, metrics=metrics, k=3)
-    #svdpp.fit(train_data, verbose=2, eval_data=eval_data, metrics=metrics, k=5)
-    #svdpp.fit(train_data, verbose=2, eval_data=eval_data, metrics=metrics, k=10)
-    #my_evaluate(svdpp, eval_data, metrics=metrics, ax=ax)
     print("prediction: ", svdpp.predict(user=1, item=2333))
     print("recommendation: ", svdpp.recommend_user(user=1, n_rec=7))
 
@@ -154,11 +162,6 @@ if __name__ == "__main__":
     ncf.fit(train_data, eval_data=eval_data,  metrics=metrics, shuffle=True, dataset_name=dataset, verbose=2)
     evals = evals + ncf.evals
 
-    #evals.append(evaluate("NCF", dataset, ncf, eval_data, metrics))
-    #ncf.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=3)
-    #ncf.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=5)
-    #ncf.fit(train_data, verbose=2, shuffle=True, eval_data=eval_data, metrics=metrics, k=10)
-    #my_evaluate(ncf, eval_data, metrics=metrics, ax=ax)
     print("prediction: ", ncf.predict(user=1, item=2333))
     print("recommendation: ", ncf.recommend_user(user=1, n_rec=7))
 
@@ -167,11 +170,6 @@ if __name__ == "__main__":
     als.fit(train_data, eval_data=eval_data,  metrics=metrics, dataset_name=dataset, verbose=2, use_cg=True, n_threads=8)
     evals = evals + als.evals
 
-    #evals.append(evaluate("ALS", dataset, als, eval_data, metrics))
-    #als.fit(train_data, verbose=2, use_cg=True, n_threads=1, eval_data=eval_data, metrics=metrics, k=3)
-    #als.fit(train_data, verbose=2, use_cg=True, n_threads=1, eval_data=eval_data, metrics=metrics, k=5)
-    #als.fit(train_data, verbose=2, use_cg=True, n_threads=1, eval_data=eval_data, metrics=metrics, k=10)
-    #my_evaluate(als, eval_data, metrics=metrics, ax=ax)
     print("prediction: ", als.predict(user=1, item=2333))
     print("recommendation: ", als.recommend_user(user=1, n_rec=7))
 
@@ -179,12 +177,7 @@ if __name__ == "__main__":
     bpr = BPR("ranking", data_info, embed_size=16, n_epochs=15, lr=3e-4, reg=None, batch_size=256, num_neg=1, use_tf=True)
     bpr.fit(train_data, eval_data=eval_data,  metrics=metrics, dataset_name=dataset, verbose=2, num_threads=16, optimizer="adam")
     evals = evals + bpr.evals
-    #evals.append(evaluate("BPR", dataset, bpr, eval_data, metrics))
-    #bpr.fit(train_data, verbose=2, num_threads=16, eval_data=eval_data, metrics=metrics, optimizer="adam", k=3)
-    #bpr.fit(train_data, verbose=2, num_threads=16, eval_data=eval_data, metrics=metrics, optimizer="adam", k=5)
-    #bpr.fit(train_data, verbose=2, num_threads=16, eval_data=eval_data, metrics=metrics, optimizer="adam", k=10)
-    #my_evaluate(bpr, eval_data, metrics=metrics, ax=ax)
 
     print(f"total running time: {(time.perf_counter() - start_time):.2f}")
-    pd.DataFrame(evals).to_csv("D:/dev/marco/masterthesis/recosys/data/consumer/evaluation-" + dataset + ".csv", index=False)
+    pd.DataFrame(evals).to_csv("./data/consumer/evaluation-" + dataset + ".csv", index=False)
     plt.show()
